@@ -1,0 +1,22 @@
+{
+    "name": "misc-sites",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Miscellaneous sites",
+    "scripts": {
+        "dev": "NODE_ENV=development bun start",
+        "start": "bun run src/server.ts",
+        "lint": "concurrently 'biome check' 'tsc --noEmit'",
+        "lint:fix": "concurrently 'biome check --fix' 'tsc --noEmit'"
+    },
+    "dependencies": {
+        "@biomejs/biome": "2.5.1",
+        "@vercel/functions": "^3.7.4"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "concurrently": "^10.0.3",
+        "typescript": "^6.0.3"
+    }
+}

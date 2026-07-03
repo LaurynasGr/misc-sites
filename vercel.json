@@ -1,0 +1,14 @@
+{
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "outputDirectory": "dist",
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                { "key": "x-content-type-options", "value": "nosniff" },
+                { "key": "referrer-policy", "value": "no-referrer" },
+                { "key": "x-frame-options", "value": "DENY" }
+            ]
+        }
+    ]
+}
