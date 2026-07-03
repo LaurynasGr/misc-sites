@@ -18,9 +18,22 @@ const APP_PASSWORD = process.env.APP_PASSWORD ?? '';
 const SESSION_SECRET = process.env.SESSION_SECRET || APP_PASSWORD;
 const SESSION_MAX_AGE = 7 * 24 * 60 * 60; // seconds
 
-// Run on every path except the login page (must stay reachable) and Vercel internals.
+/**
+ * Public pages — served to everyone, no login required. Each entry is a site's
+ * base path; the page itself and everything nested under it (images, etc.) are
+ * open. Add a path here to share a site without handing out the password.
+ */
+const PUBLIC_PREFIXES = ['/telefonas-teciui'];
+
+/** True for a public page's own path or anything nested beneath it. */
+function isPublic(pathname: string): boolean {
+    return PUBLIC_PREFIXES.some((base) => pathname === base || pathname.startsWith(`${base}/`));
+}
+
+// Run on every path except the login page (must stay reachable), the shared static
+// assets it needs pre-auth (/assets/ — CSS etc., non-sensitive), and Vercel internals.
 export const config = {
-    matcher: ['/((?!_vercel/|login/).*)'],
+    matcher: ['/((?!_vercel/|login/|assets/).*)'],
 };
 
 const encoder = new TextEncoder();
@@ -104,6 +117,9 @@ export default async function middleware(request: Request): Promise<Response> {
     if (!APP_PASSWORD) return next(); // gate disabled — serve openly
 
     const { pathname } = new URL(request.url);
+
+    // Public pages need no login — serve them (and their assets) openly.
+    if (isPublic(pathname)) return next();
 
     if (request.method === 'POST' && pathname === '/login') {
         const form = await request.formData().catch(() => null);

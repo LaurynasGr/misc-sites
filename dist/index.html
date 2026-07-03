@@ -4,50 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>misc.</title>
+  <link rel="stylesheet" href="/assets/base.css">
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #101012;
-      --ink: #f2f2f3;
-      --muted: #97979f;
-      --line: #2c2c31;
-      --panel: #121215;
-      --accent: #e0b568;
-    }
-    * { box-sizing: border-box }
-    body {
-      margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      background: var(--bg); color: var(--ink); overflow-x: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    .mono {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
-    }
-    /* Soft glow that drifts slowly behind the content. */
-    .glow {
-      position: fixed; z-index: 0; width: 70vmax; height: 70vmax; border-radius: 50%;
-      background: radial-gradient(circle, rgba(224, 181, 104, .07), transparent 60%);
-      top: -20vmax; left: -15vmax; pointer-events: none;
-      animation: drift 26s ease-in-out infinite alternate;
-    }
-    @keyframes drift {
-      to { transform: translate(30vmax, 18vmax) }
-    }
-    main {
-      position: relative; z-index: 1; width: min(560px, 92vw); padding: 48px 0;
-    }
-    .eyebrow { margin: 0 0 14px }
-    h1 {
-      margin: 0 0 10px; font-size: clamp(56px, 12vw, 76px); line-height: 1;
-      font-weight: 800; letter-spacing: -.045em;
-    }
-    h1 .dot { color: var(--accent) }
-    .tagline { margin: 0 0 40px; color: var(--muted); font-size: 15px }
+    /* Shelf list — index-only. Shared styling lives in /assets/base.css. */
     ul { list-style: none; margin: 0 0 40px; padding: 0 }
     li + li { margin-top: 10px }
     li a {
-      display: flex; align-items: baseline; gap: 14px; padding: 14px 16px; border-radius: 12px;
+      display: flex; align-items: baseline; gap: 14px; padding: 14px 16px; border-radius: var(--radius);
       border: 1px solid var(--line); background: var(--panel);
       color: var(--ink); font-size: 15px; text-decoration: none;
       transition: border-color .15s ease, transform .15s ease;
@@ -55,39 +18,25 @@
     li a:hover, li a:focus-visible { border-color: var(--accent); transform: translateX(4px); outline: none }
     li a .idx { color: var(--accent) }
     .empty {
-      padding: 26px 16px; border: 1px dashed var(--line); border-radius: 12px;
+      padding: 26px 16px; border: 1px dashed var(--line); border-radius: var(--radius);
       color: var(--muted); font-size: 14px; text-align: center;
     }
     footer { display: flex; justify-content: space-between; align-items: baseline; margin-top: 40px }
     .logout { color: var(--muted); font-size: 13.5px; text-decoration: none }
     .logout:hover, .logout:focus-visible { color: var(--ink) }
-    /* Staggered load-in. */
-    .reveal { opacity: 0; transform: translateY(10px); animation: rise .5s ease forwards }
-    .reveal:nth-child(2) { animation-delay: .07s }
-    .reveal:nth-child(3) { animation-delay: .14s }
-    .reveal:nth-child(4) { animation-delay: .21s }
-    .reveal:nth-child(5) { animation-delay: .28s }
-    @keyframes rise {
-      to { opacity: 1; transform: none }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .glow { animation: none }
-      .reveal { animation: none; opacity: 1; transform: none }
-    }
   </style>
 </head>
-<body>
+<body class="shell">
   <div class="glow" aria-hidden="true"></div>
   <main>
     <p class="eyebrow mono reveal">private index</p>
     <h1 class="reveal">misc<span class="dot">.</span></h1>
     <p class="tagline reveal">Small sites, one shelf. New ones show up below.</p>
     <ul class="reveal">
-      <!-- <li><a href="/example/"><span class="idx mono">01</span>Example site</a></li> -->
-      <li class="empty">Nothing on the shelf yet.</li>
+      <li><a href="/telefonas-teciui/"><span class="idx mono">01</span>Telefonas tėčiui</a></li>
     </ul>
     <footer class="reveal">
-      <span class="mono">0 sites</span>
+      <span class="mono">1 site</span>
       <a class="logout" href="/logout">Log out</a>
     </footer>
   </main>

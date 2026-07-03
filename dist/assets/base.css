@@ -1,0 +1,148 @@
+/*
+ * base.css — shared design system for the misc. shelf and the sites it hosts.
+ *
+ * Defines the design tokens (colour, type, radius) and the primitives every page
+ * reuses (reset, mono label, drifting glow, staggered reveal, focus ring) plus the
+ * shelf layout used by the index and login screens. The palette below is the dark
+ * "shelf" theme; a hosted site can re-theme simply by overriding the tokens in its
+ * own :root (see telefonas-teciui).
+ *
+ * Loaded on every page — including the pre-auth login screen — so it lives under
+ * /assets/, which the edge middleware leaves outside the password gate.
+ */
+:root {
+    color-scheme: dark;
+
+    /* Surface — the dark shelf palette. Override these to re-theme a page. */
+    --bg: #101012;
+    --ink: #f2f2f3;
+    --muted: #97979f;
+    --line: #2c2c31;
+    --panel: #121215;
+
+    /* Brand accent — the through-line across every page. */
+    --gold: #e0b568;
+    --accent: var(--gold);
+
+    /* Type. */
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+a {
+    color: inherit;
+}
+
+/* Monospace eyebrow / label. Colour via --mono-color (defaults to muted). */
+.mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mono-color, var(--muted));
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ---------- shelf layout (index + login) ---------- */
+.shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Soft glow that drifts slowly behind the content. */
+.glow {
+    position: fixed;
+    z-index: 0;
+    width: 70vmax;
+    height: 70vmax;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(224, 181, 104, 0.07), transparent 60%);
+    top: -20vmax;
+    left: -15vmax;
+    pointer-events: none;
+    animation: drift 26s ease-in-out infinite alternate;
+}
+@keyframes drift {
+    to {
+        transform: translate(30vmax, 18vmax);
+    }
+}
+main {
+    position: relative;
+    z-index: 1;
+    width: min(560px, 92vw);
+    padding: 48px 0;
+}
+.eyebrow {
+    margin: 0 0 14px;
+}
+h1 {
+    margin: 0 0 10px;
+    font-size: clamp(56px, 12vw, 76px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+}
+h1 .dot {
+    color: var(--accent);
+}
+.tagline {
+    margin: 0 0 40px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+/* ---------- staggered load-in ---------- */
+.reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: rise 0.5s ease forwards;
+}
+.reveal:nth-child(2) {
+    animation-delay: 0.07s;
+}
+.reveal:nth-child(3) {
+    animation-delay: 0.14s;
+}
+.reveal:nth-child(4) {
+    animation-delay: 0.21s;
+}
+.reveal:nth-child(5) {
+    animation-delay: 0.28s;
+}
+@keyframes rise {
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .glow {
+        animation: none;
+    }
+    .reveal {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
